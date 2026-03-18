@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quick Notes</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -15,14 +16,14 @@
         }
 
         .container {
-            max-width: 900px;
+            max-width: 960px;
             margin: 0 auto;
         }
 
         /* Header */
         .header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 32px;
             color: white;
         }
         .header h1 {
@@ -39,14 +40,17 @@
         /* Toolbar */
         .toolbar {
             display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
             justify-content: center;
-            margin-bottom: 32px;
+            margin-bottom: 24px;
         }
+
         .btn-add {
             background: white;
             color: #6366f1;
             border: none;
-            padding: 14px 32px;
+            padding: 13px 28px;
             border-radius: 50px;
             font-size: 15px;
             font-weight: 600;
@@ -59,6 +63,36 @@
             box-shadow: 0 8px 28px rgba(0,0,0,0.25);
         }
 
+        /* Search & Filter bar */
+        .search-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 28px;
+        }
+
+        .search-bar input,
+        .search-bar select {
+            padding: 11px 16px;
+            border-radius: 50px;
+            border: none;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+            background: white;
+            color: #374151;
+        }
+
+        .search-bar input {
+            width: 260px;
+        }
+
+        .search-bar select {
+            cursor: pointer;
+        }
+
         /* Notes grid */
         .notes-grid {
             display: grid;
@@ -66,6 +100,7 @@
             gap: 20px;
         }
 
+        /* Note card colors */
         .note-card {
             background: white;
             border-radius: 16px;
@@ -83,8 +118,19 @@
             position: absolute;
             top: 0; left: 0; right: 0;
             height: 4px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
         }
+        .note-card.color-white::before  { background: linear-gradient(90deg, #667eea, #764ba2); }
+        .note-card.color-red            { background: #fff5f5; }
+        .note-card.color-red::before    { background: linear-gradient(90deg, #f87171, #dc2626); }
+        .note-card.color-yellow         { background: #fffbeb; }
+        .note-card.color-yellow::before { background: linear-gradient(90deg, #fbbf24, #d97706); }
+        .note-card.color-green          { background: #f0fdf4; }
+        .note-card.color-green::before  { background: linear-gradient(90deg, #4ade80, #16a34a); }
+        .note-card.color-blue           { background: #eff6ff; }
+        .note-card.color-blue::before   { background: linear-gradient(90deg, #60a5fa, #2563eb); }
+        .note-card.color-purple         { background: #faf5ff; }
+        .note-card.color-purple::before { background: linear-gradient(90deg, #c084fc, #7c3aed); }
+
         .note-card:hover {
             transform: translateY(-4px);
             box-shadow: 0 12px 32px rgba(0,0,0,0.15);
@@ -105,6 +151,16 @@
             color: #c4b5fd;
             font-weight: 500;
         }
+        .note-reminder {
+            font-size: 12px;
+            color: #f59e0b;
+            font-weight: 500;
+        }
+        .note-color-badge {
+            font-size: 12px;
+            font-weight: 500;
+            opacity: 0.7;
+        }
         .note-actions {
             display: flex;
             gap: 8px;
@@ -121,7 +177,7 @@
             transition: opacity 0.15s;
         }
         .note-actions button:hover { opacity: 0.85; }
-        .btn-edit { background: #ede9fe; color: #6d28d9; }
+        .btn-edit   { background: #ede9fe; color: #6d28d9; }
         .btn-delete { background: #fee2e2; color: #dc2626; }
 
         /* Empty state */
@@ -145,6 +201,7 @@
             justify-content: center;
             align-items: center;
             z-index: 100;
+            padding: 20px;
         }
         .modal-overlay.active { display: flex; }
 
@@ -156,6 +213,8 @@
             max-width: 480px;
             box-shadow: 0 24px 60px rgba(0,0,0,0.3);
             animation: slideUp 0.25s ease;
+            max-height: 90vh;
+            overflow-y: auto;
         }
         @keyframes slideUp {
             from { transform: translateY(30px); opacity: 0; }
@@ -167,7 +226,9 @@
             color: #1e1b4b;
             margin-bottom: 20px;
         }
-        .modal input, .modal textarea {
+        .modal input,
+        .modal textarea,
+        .modal select {
             width: 100%;
             padding: 12px 14px;
             margin-bottom: 14px;
@@ -177,11 +238,60 @@
             font-family: 'Inter', sans-serif;
             outline: none;
             transition: border-color 0.2s;
+            color: #374151;
         }
-        .modal input:focus, .modal textarea:focus {
+        .modal input:focus,
+        .modal textarea:focus,
+        .modal select:focus {
             border-color: #6366f1;
         }
         .modal textarea { height: 130px; resize: vertical; }
+
+        .modal label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #6b7280;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        /* Color picker */
+        .color-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+        .color-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+        }
+        .color-dot {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            transition: border-color 0.15s, transform 0.15s;
+        }
+        .color-dot:hover { transform: scale(1.15); }
+        .color-option.selected .color-dot {
+            border-color: #6366f1;
+            transform: scale(1.15);
+        }
+        .color-dot.white  { background: #e5e7eb; }
+        .color-dot.red    { background: #f87171; }
+        .color-dot.yellow { background: #fbbf24; }
+        .color-dot.green  { background: #4ade80; }
+        .color-dot.blue   { background: #60a5fa; }
+        .color-dot.purple { background: #c084fc; }
+        .color-label {
+            font-size: 10px;
+            color: #9ca3af;
+            font-weight: 500;
+        }
 
         .modal-actions {
             display: flex;
@@ -199,8 +309,22 @@
             transition: opacity 0.15s;
         }
         .modal-actions button:hover { opacity: 0.85; }
-        .btn-save { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+        .btn-save   { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
         .btn-cancel { background: #f3f4f6; color: #374151; }
+
+        /* Mobile responsive */
+        @media (max-width: 600px) {
+            body { padding: 20px 12px; }
+            .header h1 { font-size: 28px; }
+            .search-bar input { width: 100%; }
+            .search-bar { flex-direction: column; align-items: stretch; }
+            .search-bar input,
+            .search-bar select { border-radius: 12px; }
+            .notes-grid { grid-template-columns: 1fr; }
+            .modal { padding: 24px; }
+            .toolbar { flex-direction: column; align-items: stretch; }
+            .btn-add { border-radius: 12px; text-align: center; }
+        }
     </style>
 </head>
 <body>
@@ -215,6 +339,25 @@
         <button class="btn-add" onclick="openCreate()">+ New Note</button>
     </div>
 
+    <!-- Search & Filter -->
+    <div class="search-bar">
+        <input type="text" id="search-input" placeholder="🔍 Search notes..." oninput="filterNotes()">
+        <select id="filter-color" onchange="filterNotes()">
+            <option value="">🎨 All Colors</option>
+            <option value="white">⚪ Default</option>
+            <option value="red">🔴 Urgent</option>
+            <option value="yellow">🟡 Important</option>
+            <option value="green">🟢 Done</option>
+            <option value="blue">🔵 Idea</option>
+            <option value="purple">🟣 Personal</option>
+        </select>
+        <select id="filter-sort" onchange="filterNotes()">
+            <option value="updated">🕐 Last Updated</option>
+            <option value="created">📅 Date Created</option>
+            <option value="title">🔤 Title A–Z</option>
+        </select>
+    </div>
+
     <div class="notes-grid" id="notes"></div>
 
 </div>
@@ -223,8 +366,44 @@
 <div class="modal-overlay" id="modal">
     <div class="modal">
         <h2 id="modal-title">New Note</h2>
-        <input type="text" id="input-title" placeholder="Title">
+
+        <label>Title</label>
+        <input type="text" id="input-title" placeholder="Note title">
+
+        <label>Content</label>
         <textarea id="input-content" placeholder="What's on your mind?"></textarea>
+
+        <label>Color</label>
+        <div class="color-options">
+            <div class="color-option selected" data-color="white" onclick="selectColor('white')">
+                <div class="color-dot white"></div>
+                <span class="color-label">Default</span>
+            </div>
+            <div class="color-option" data-color="red" onclick="selectColor('red')">
+                <div class="color-dot red"></div>
+                <span class="color-label">Urgent</span>
+            </div>
+            <div class="color-option" data-color="yellow" onclick="selectColor('yellow')">
+                <div class="color-dot yellow"></div>
+                <span class="color-label">Important</span>
+            </div>
+            <div class="color-option" data-color="green" onclick="selectColor('green')">
+                <div class="color-dot green"></div>
+                <span class="color-label">Done</span>
+            </div>
+            <div class="color-option" data-color="blue" onclick="selectColor('blue')">
+                <div class="color-dot blue"></div>
+                <span class="color-label">Idea</span>
+            </div>
+            <div class="color-option" data-color="purple" onclick="selectColor('purple')">
+                <div class="color-dot purple"></div>
+                <span class="color-label">Personal</span>
+            </div>
+        </div>
+
+        <label>⏰ Reminder (optional)</label>
+        <input type="datetime-local" id="input-reminder">
+
         <div class="modal-actions">
             <button class="btn-cancel" onclick="closeModal()">Cancel</button>
             <button class="btn-save" onclick="saveNote()">Save</button>
@@ -234,34 +413,92 @@
 
 <script>
     let editingId = null;
+    let selectedColor = 'white';
+    let allNotes = [];
+
+    const colorLabels = {
+        white:  '⚪ Default',
+        red:    '🔴 Urgent',
+        yellow: '🟡 Important',
+        green:  '🟢 Done',
+        blue:   '🔵 Idea',
+        purple: '🟣 Personal',
+    };
 
     async function loadNotes() {
         const res = await fetch('/api/notes/');
-        const data = await res.json();
+        allNotes = await res.json();
+        filterNotes();
+        scheduleReminders(allNotes);
+    }
+
+    function filterNotes() {
+        const query = document.getElementById('search-input').value.toLowerCase();
+        const colorFilter = document.getElementById('filter-color').value;
+        const sortBy = document.getElementById('filter-sort').value;
+
+        let filtered = allNotes.filter(note => {
+            const matchSearch = note.title.toLowerCase().includes(query) ||
+                                (note.content && note.content.toLowerCase().includes(query));
+            const matchColor = colorFilter ? note.color === colorFilter : true;
+            return matchSearch && matchColor;
+        });
+
+        if (sortBy === 'title') {
+            filtered.sort((a, b) => a.title.localeCompare(b.title));
+        } else if (sortBy === 'created') {
+            filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        } else {
+            filtered.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+        }
+
+        renderNotes(filtered);
+    }
+
+    function renderNotes(notes) {
         const container = document.getElementById('notes');
         container.innerHTML = '';
 
-        if (data.length === 0) {
+        if (notes.length === 0) {
             container.innerHTML = `
                 <div class="empty">
                     <div class="empty-icon">🗒️</div>
-                    <p>No notes yet. Click "+ New Note" to get started!</p>
+                    <p>No notes found. Click "+ New Note" to get started!</p>
                 </div>`;
             return;
         }
 
-        data.forEach(note => {
+        notes.forEach(note => {
             const card = document.createElement('div');
-            card.className = 'note-card';
+            card.className = `note-card color-${note.color || 'white'}`;
+
+            const reminderHtml = note.reminder_at
+                ? `<div class="note-reminder">⏰ ${new Date(note.reminder_at).toLocaleString('en')}</div>`
+                : '';
+
+            const escapedTitle = note.title.replace(/`/g, '\\`').replace(/'/g, "\\'");
+            const escapedContent = (note.content || '').replace(/`/g, '\\`').replace(/'/g, "\\'");
+            const escapedColor = note.color || 'white';
+            const escapedReminder = note.reminder_at || '';
+
             card.innerHTML = `
+                <div class="note-color-badge">${colorLabels[note.color] || '⚪ Default'}</div>
                 <h3>${note.title}</h3>
                 <p>${note.content || '—'}</p>
+                ${reminderHtml}
                 <small>Updated: ${new Date(note.updated_at).toLocaleString('en')}</small>
                 <div class="note-actions">
-                    <button class="btn-edit" onclick="openEdit(${note.id}, \`${note.title}\`, \`${note.content}\`)">✏️ Edit</button>
+                    <button class="btn-edit" onclick="openEdit(${note.id}, \`${escapedTitle}\`, \`${escapedContent}\`, '${escapedColor}', '${escapedReminder}')">✏️ Edit</button>
                     <button class="btn-delete" onclick="deleteNote(${note.id})">🗑️ Delete</button>
                 </div>`;
             container.appendChild(card);
+        });
+    }
+
+    function selectColor(color) {
+        selectedColor = color;
+        document.querySelectorAll('.color-option').forEach(el => {
+            el.classList.toggle('selected', el.dataset.color === color);
         });
     }
 
@@ -270,15 +507,21 @@
         document.getElementById('modal-title').textContent = 'New Note';
         document.getElementById('input-title').value = '';
         document.getElementById('input-content').value = '';
+        document.getElementById('input-reminder').value = '';
+        selectColor('white');
         document.getElementById('modal').classList.add('active');
         document.getElementById('input-title').focus();
     }
 
-    function openEdit(id, title, content) {
+    function openEdit(id, title, content, color, reminder) {
         editingId = id;
         document.getElementById('modal-title').textContent = 'Edit Note';
         document.getElementById('input-title').value = title;
         document.getElementById('input-content').value = content;
+        document.getElementById('input-reminder').value = reminder
+            ? new Date(reminder).toISOString().slice(0, 16)
+            : '';
+        selectColor(color || 'white');
         document.getElementById('modal').classList.add('active');
         document.getElementById('input-title').focus();
     }
@@ -290,6 +533,7 @@
     async function saveNote() {
         const title = document.getElementById('input-title').value.trim();
         const content = document.getElementById('input-content').value.trim();
+        const reminder = document.getElementById('input-reminder').value;
         if (!title) { alert('Title is required.'); return; }
 
         const url = editingId ? `/api/notes/${editingId}/` : '/api/notes/';
@@ -301,7 +545,12 @@
                 'Content-Type': 'application/json',
                 'X-CSRFToken': getCookie('csrftoken'),
             },
-            body: JSON.stringify({ title, content }),
+            body: JSON.stringify({
+                title,
+                content,
+                color: selectedColor,
+                reminder_at: reminder || null,
+            }),
         });
 
         closeModal();
@@ -321,6 +570,33 @@
         const value = `; ${document.cookie}`;
         const parts = value.split(`; ${name}=`);
         if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+
+    // Reminders — browser notifications
+    function scheduleReminders(notes) {
+        if (!('Notification' in window)) return;
+
+        if (Notification.permission === 'default') {
+            Notification.requestPermission();
+        }
+
+        notes.forEach(note => {
+            if (!note.reminder_at) return;
+            const reminderTime = new Date(note.reminder_at).getTime();
+            const now = Date.now();
+            const diff = reminderTime - now;
+
+            if (diff > 0 && diff < 24 * 60 * 60 * 1000) {
+                setTimeout(() => {
+                    if (Notification.permission === 'granted') {
+                        new Notification(`⏰ Reminder: ${note.title}`, {
+                            body: note.content || 'You have a note reminder!',
+                            icon: '📝',
+                        });
+                    }
+                }, diff);
+            }
+        });
     }
 
     document.getElementById('modal').addEventListener('click', function(e) {
