@@ -12,16 +12,16 @@ A lightweight web application for managing personal notes — built with Django 
 ## 📸 Screenshots
 
 ### Main Page
-![Main Page](screenshots/main.png)
+![Main Page](assets/main.png)
 
 ### Create / Edit Note
-![Modal](screenshots/modal.png)
+![Modal](assets/modal.png)
 
 ### Note Colors
-![Colors](screenshots/colors.png)
+![Colors](assets/colors.png)
 
 ### Mobile View
-![Mobile](screenshots/mobile.png)
+![Mobile](assets/mobile.png)
 
 ---
 
