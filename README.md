@@ -64,7 +64,7 @@ venv\Scripts\activate         # Windows
 
 ### 3. Install dependencies
 ```bash
-pip install django djangorestframework
+pip install django djangorestframework python-decouple
 ```
 
 ### 4. Apply migrations
